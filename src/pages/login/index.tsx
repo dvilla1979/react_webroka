@@ -5,6 +5,8 @@ import { useFormik } from 'formik';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { authThunk } from '../../redux/thunks/auth.thunks';
+import { useNotification } from '../../context/notification.context';
+
 
 type LoginType = {
   username: string;
@@ -15,9 +17,12 @@ type LoginType = {
 export const LoginPage: React.FC<{}> = () =>{
 
   //const {getSuccess} = useNotification();
-  const {isAuth, userData} = useAppSelector((state) => (state.authReducer))
+  const {isAuth, userData, error} = useAppSelector((state) => (state.authReducer))
   const navigate = useNavigate();
   const dispatch = useAppDispatch();  
+  //const error = useAppSelector((state) => state.authReducer.error);
+
+  const {getError} = useNotification();
 
   const formik = useFormik<LoginType>({
     initialValues: {
@@ -26,15 +31,24 @@ export const LoginPage: React.FC<{}> = () =>{
     },
     validationSchema: LoginValidate,  
     onSubmit: async (values: LoginType) => {
-
-        await dispatch(authThunk(values)).unwrap()      
-        navigate('/');
-
+      await dispatch(authThunk(values))
+        .unwrap()
+        .then(() => {
+          navigate('/');
+        })
+        .catch(e => {
+          getError(e);
+        }
+      );      
     },
   });
+
+
 //
   return (
-      <Container maxWidth = "sm">
+      <Container 
+        maxWidth = "sm"
+      >
         <Grid 
           container 
           direction="column" 
@@ -43,13 +57,22 @@ export const LoginPage: React.FC<{}> = () =>{
           sx= {{minHeight: "100vh"}}
         >
           <Grid item>
-            <Paper sx={{padding: "1.2em", borderRadius: "0.5em"}}>
+            <Paper 
+              sx={{padding: "1.2em", 
+              borderRadius: "0.5em"}}
+            >
               <Typography
                   sx= {{mt: 1, mb:1}}
                   variant="h4"
                 >
-                  Iniciar sesión
+                  Acceso a WebRoka
               </Typography>
+              <Typography
+                  sx= {{mt: 1, mb:1}}
+                  variant="h6"
+                >
+                  Ingresar usuario y contraseña
+              </Typography>              
               <Box component="form" onSubmit={formik.handleSubmit}>
                   <TextField 
                     name= "username" 

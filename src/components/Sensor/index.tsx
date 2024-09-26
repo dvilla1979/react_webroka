@@ -5,6 +5,7 @@ import { NumericFormat } from 'react-number-format';
 import moment from "moment";
 import { usePageVisibility } from "../../pages/camaras/usePageVisibility";
 import Tooltip from '@mui/material/Tooltip';
+import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
 
 type CardProps = {
     propsSensor: TypeSensor;
@@ -53,76 +54,63 @@ export const SensorComponent: React.FC<CardProps> = ({propsSensor}) => {
 
     return (
         <Card >
-            <CardContent
+            {
+            propsSensor.valores?.length !== 0 ? (
+                <Tooltip 
+                    title={`Ultima muestra: ${moment(propsSensor.valores[0].fecha_hora_value).format("DD/MM/YYYY HH:mm")}
+                            Descirpcion: ${propsSensor.descripcion} `} 
+                >
+                <CardContent
                  style={{
                     backgroundColor: "#29a9f0" ,
                     borderColor: 'blue', 
                     color: 'white',
                 }}
-                 >
-                <Typography 
-                    variant = "subtitle2" 
-                    //sx = {{mb: 0.5}}
-                    align="center"
                 >
-                    {propsSensor.name_front}
-                </Typography>
-                <Typography 
-                    variant = "h6" 
-                   // sx = {{mb: 0.5}}
-                    align="center"
-                >
-                    {
-                        propsSensor.valores?.length !== 0 ? (
-                            <Tooltip 
-                            title={`Ultima muestra: ${moment(propsSensor.valores[0].fecha_hora_value).format("DD/MM/YYYY HH:mm")}`} 
-                            >
-                            <Box  
-                                sx={{ display: "flex", 
-                                    justifyContent: "center", 
-                                    flexDirection: 'column'}} 
-                            >
+                    <Typography 
+                        variant = "subtitle2" 
+                        align="center"
+                    >
+                    <DeviceThermostatIcon  sx={{verticalAlign:"middle"}} /> {propsSensor.name_front}
+                    </Typography>
+                    <Typography 
+                        variant = "h6" 
+                        align="center"
+                    >
+                        <Box  
+                            sx={{ display: "flex", 
+                                justifyContent: "center", 
+                                flexDirection: 'column'}} 
+                        >
+                            <div>
+                            {
+                                estado  ? (
+                                        <NumericFormat 
+                                            value={propsSensor.valores[0].value} 
+                                            displayType={'text'} 
+                                            allowNegative 
+                                            suffix={'°C'} 
+                                            decimalScale={1}
+                                            decimalSeparator=","
+                                            fixedDecimalScale
+                                        />
+                                ):
                                 <div>
-                                {
-                                    estado  ? (
-
-                                            <NumericFormat 
-                                                value={propsSensor.valores[0].value} 
-                                                displayType={'text'} 
-                                                allowNegative 
-                                                suffix={'°C'} 
-                                                decimalScale={1}
-                                                decimalSeparator=","
-                                                fixedDecimalScale
-                                            />
-                                    ):
-                                    <div>
-                                        <Typography
-                                            variant = "subtitle2" 
-                                            align="center"> 
-                                            --,-°C
-                                        </Typography>
-                                        {/*<Typography
-                                            variant = "subtitle2" 
-                                            align="center"> 
-                                                Ultima muestra
-                                        </Typography>                                        
-                                        <Typography
-                                            variant = "subtitle2" 
-                                            align="center"> 
-                                            {moment(propsSensor.valores[0].fecha_hora_value).format("DD/MM/YYYY HH:mm")}
-                                        </Typography>*/}
-                                    </div>
-                                }
+                                    <Typography
+                                        variant = "subtitle2" 
+                                        align="center"
+                                        color="error"> 
+                                        --,-°C
+                                    </Typography>
                                 </div>
-                                <div>
-                                </div>
-                             </Box>
-                             </Tooltip>
-                        ) : "No hay sensores"
-                    }
-                </Typography>
-            </CardContent>
+                            }
+                            </div>
+                        </Box>
+                    </Typography>
+                </CardContent>
+            </Tooltip>
+            ) : "No hay sensores"
+        }
         </Card>
     )
 }

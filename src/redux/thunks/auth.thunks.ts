@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { user } from "../../api/user";
-import { localUser } from "../../utils/localUser";
+
 
 export const authThunk = createAsyncThunk(
     'login',
@@ -10,17 +10,27 @@ export const authThunk = createAsyncThunk(
     ) => {
         try {
 
-
             const AuthData = await user.login(username, password);
 
             const resData = AuthData.data;           
 
             localStorage.setItem("userInfo", JSON.stringify(resData));
 
-            return resData;
+            if (AuthData.status === 200) {
+                return resData // Retornamos los datos del usuario desde la respuesta
+              }
 
-        } catch (error) {
-            return rejectWithValue(error);
+         //   return resData;
+
+        } catch (error: any) {
+            
+            if (error.response && error.response.status === 401) {
+                // En caso de error 401, devolvemos un mensaje de error específico
+                return rejectWithValue('Credenciales incorrectas. Por favor, inténtalo de nuevo.');
+              } else {
+                // En caso de otros errores, devolvemos un mensaje de error genérico
+                return rejectWithValue('Ocurrió un error. Por favor, inténtalo de nuevo más tarde.');
+              }
         }
     },
 )

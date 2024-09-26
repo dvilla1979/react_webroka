@@ -8,9 +8,11 @@ type ThemeProp = {
 
 export enum ThemePallete {
     //BG = "#12181b", //Color del backgorund 
-    BG = "#dfeaf", //Color del backgorund
+    //BG = "#dfeaf", //Color del backgorund
+    BG = "#ffff", //Color del backgorund
     //LIME = "#C8FA5F",
-    LIME = "#0069d9",
+    NAVYBLUE = "#0069d9",
+    AIRFORCEBLUE = "#3387E1",
     FONT_GLOBAL = "'JetBrains Mono', monospace",
     //Alert styles
     ERROR_MAIN= "#f44336",
@@ -26,7 +28,10 @@ const theme = createTheme ({
             default: ThemePallete.BG,
         },
         primary: {
-            main:   ThemePallete.LIME,
+            main:   ThemePallete.NAVYBLUE,
+        },
+        secondary: {
+            main:   ThemePallete.AIRFORCEBLUE,
         }
     },
     typography: {

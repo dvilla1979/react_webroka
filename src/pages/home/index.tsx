@@ -52,11 +52,6 @@ export const HomePage: React.FC = () => {
 
   return (
     <Container maxWidth="xl"> 
-      <HeaderComponent 
-        title="Frigorificos"
-        description= ""
-        //element={<Button fullWidth variant="contained">Hola mundo</Button>}
-      />
       {isLoading ? (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <CircularProgress />
@@ -64,9 +59,10 @@ export const HomePage: React.FC = () => {
       ) :
         <>
           <div>
-            {/*<>
-              <Typography>Actualiza: {isFetching &&  <CircularProgress />}</Typography>
-            </>*/}
+            {/* Título de la Lista */}
+            <Typography variant="h4" textAlign="center" sx={{ marginTop: 2, marginBottom: 2 }}>
+              {"Frigorificos"}
+            </Typography>
             {
               data.data.frigorifico?.length !== 0 ? (
                 <Grid sx={{my: 2}} container spacing={2} direction="row">
@@ -78,7 +74,7 @@ export const HomePage: React.FC = () => {
                     ))
                   }
                 </Grid>
-              ) : "No hay datos"
+              ) : "No hay frigorificos para mostrar"
             }
           </div>
         </>

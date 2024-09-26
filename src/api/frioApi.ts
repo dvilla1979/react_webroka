@@ -17,7 +17,7 @@ export const frioApi = createApi({
             }
         },
     }),{
-        maxRetries: 2, //Hace dos reintentos antes de largar el error
+        maxRetries: 1, //Hace dos reintentos antes de largar el error
     },
   ),
   keepUnusedDataFor: 60, //Cantidad de tiempo que los datos quedan en cache (60 segundos)
@@ -34,6 +34,9 @@ export const frioApi = createApi({
     getFriosByUser: builder.query({
         query: (id: string) => "/userRel/" + id,
     }),
+    getUsersFrios: builder.query({
+        query: () => "/usersRel",
+    }),
     getValorCamarasByFrioId:builder.query({
         query: (id: string) => ({
             url: "/valoresfrio",
@@ -48,13 +51,109 @@ export const frioApi = createApi({
             params: args,
         })
     }),
+    getCamarasByFrioId:builder.query({
+        query: (id: string) => ({
+            url: "/camaras",
+            params: {
+                frioId: id
+            },
+        })
+    }),
+    getSensoresByCamaraId:builder.query({
+        query: (id: string) => ({
+            url: "/sensores",
+            params: {
+                camaraId: id
+            },
+        })
+    }),
 
-   /* {
-        camaraId: args.id as string,
-        fechaInicio: args.fechaInicio as Date,
-        fechaFin: args.fechaFin as Date,
-    }*/
-  
+
+
+
+    agregarFrigorfico: builder.mutation({
+        query: (nuevoFrigorifico) => ({
+            url:"/createFrigorifico",
+            method: "post",
+            body: nuevoFrigorifico,
+        })
+    }),
+    actualizarFrigorfico: builder.mutation({
+        query: ({ id, ...rest }) => ({
+            url:`updateFrigorifico/${id}`,
+            method: "put",
+            body: rest,
+        })
+    }),
+    borrarFrigorfico: builder.mutation({
+        query: (id) => ({
+            url:`deleteFrigorifico/${id}`,
+            method: "delete",
+        })
+    }),
+
+    agregarCamara: builder.mutation({
+        query: (nuevaCamara) => ({
+            url:"/createCamara",
+            method: "post",
+            body: nuevaCamara,
+        })
+    }),
+    actualizarCamara: builder.mutation({
+        query: ({ id, ...rest }) => ({
+            url:`updateCamara/${id}`,
+            method: "put",
+            body: rest,
+        })
+    }),
+    borrarCamara: builder.mutation({
+        query: (id) => ({
+            url:`deleteCamara/${id}`,
+            method: "delete",
+        })
+    }),
+
+    agregarSensor: builder.mutation({
+        query: (nuevoSensor) => ({
+            url:"/createSensor",
+            method: "post",
+            body: nuevoSensor,
+        })
+    }),
+    actualizarSensor: builder.mutation({
+        query: ({ id, ...rest }) => ({
+            url:`updateSensor/${id}`,
+            method: "put",
+            body: rest,
+        })
+    }),
+    borrarSensor: builder.mutation({
+        query: (id) => ({
+            url:`deleteSensor/${id}`,
+            method: "delete",
+        })
+    }),
+
+    agregarUsuario: builder.mutation({
+        query: (nuevoSensor) => ({
+            url:"/createUser",
+            method: "post",
+            body: nuevoSensor,
+        })
+    }),
+    actualizarUsuario: builder.mutation({
+        query: ({ id, ...rest }) => ({
+            url:`updateUser/${id}`,
+            method: "put",
+            body: rest,
+        })
+    }),
+    borrarUsuario: builder.mutation({
+        query: (id) => ({
+            url:`deleteUser/${id}`,
+            method: "delete",
+        })
+    }),
   }),
 })
 
@@ -63,7 +162,22 @@ export const frioApi = createApi({
 export const { 
     useGetFriosAllQuery, 
     useGetFriosByUserQuery, 
+    useGetUsersFriosQuery,
     useGetValorCamarasByFrioIdQuery,
     useGetValoresByCamaraIdQuery,
-    useLazyGetValoresByCamaraIdQuery
+    useLazyGetValoresByCamaraIdQuery,
+    useGetCamarasByFrioIdQuery,
+    useGetSensoresByCamaraIdQuery,
+    useAgregarFrigorficoMutation,
+    useActualizarFrigorficoMutation,
+    useBorrarFrigorficoMutation,
+    useAgregarCamaraMutation,
+    useActualizarCamaraMutation,
+    useBorrarCamaraMutation,
+    useAgregarSensorMutation,
+    useActualizarSensorMutation,
+    useBorrarSensorMutation,
+    useAgregarUsuarioMutation,
+    useActualizarUsuarioMutation,
+    useBorrarUsuarioMutation,
 } = frioApi

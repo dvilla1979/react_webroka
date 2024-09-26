@@ -1,4 +1,4 @@
-import { Button, Container } from "@mui/material";
+import { Button, Container, Stack } from "@mui/material";
 import React from "react";
 import { HeaderComponent } from "../../components";
 import { localUser } from "../../utils/localUser";
@@ -6,6 +6,8 @@ import { TypeCamaras, TypeFrioCamSenValor } from "../camaras/interface/camara.in
 import { useLocation, useNavigate } from "react-router-dom";
 import { GraficoComponent } from "../../components/Grafico";
 import { TypeFrigorficos } from "../home/interace/frigorifico.interface";
+import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
 export const GraficosPage: React.FC = () => {
 
@@ -20,11 +22,24 @@ export const GraficosPage: React.FC = () => {
 
   return (
     <Container maxWidth="xl">
-      <HeaderComponent
-        title= {`Frigorifico ${frio.name}`}
-        description = ""
-        element={<Button fullWidth variant="contained" onClick ={()=> navigate("/camaras",{state: frio})} >Ir a Lista de Camaras</Button>}
-      />     
+        <Stack sx={{my: 2}} spacing={2} direction="row">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/")}
+            startIcon={<KeyboardDoubleArrowLeftIcon />} 
+          >
+            FRIGORIFICOS
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/camaras",{state: frio})}
+            startIcon={<NavigateBeforeIcon />} 
+          >
+            CAMARAS
+          </Button>
+        </Stack>  
       <>
         <div>
           {

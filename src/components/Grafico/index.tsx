@@ -63,7 +63,7 @@ export const GraficoComponent: React.FC<CardProps> = ({propsCamara}) => {
     Legend,
     TimeScale,
     zoomPlugin,
-    
+    CrosshairPlugin,
   );
 
   async function fetchData(x1: Date, x2: Date) : Promise<TypeSensor[] | null> {
@@ -152,7 +152,8 @@ export const GraficoComponent: React.FC<CardProps> = ({propsCamara}) => {
       ticks: {
         autoSkip: true,
         autoSkipPadding: 50,
-        maxRotation: 0
+        maxRotation: 0,
+        color: 'rgb(0,0,0)' 
       },
       time: {
         units: "hour",
@@ -162,13 +163,19 @@ export const GraficoComponent: React.FC<CardProps> = ({propsCamara}) => {
         },
         tooltipFormat: "DD/MM/YYYY HH:mm",
       },
+
       grid: {
-        color: 'rgba(49, 48, 48, 0.3)',
+        color: 'rgba(49, 48, 48, 0.5)',
+          display: true,
+          drawBorder: true, // Dibuja el borde del eje X
+          //color: 'rgba(0, 0, 0, 0.1)', // Color de la cuadrícula
+          borderColor: 'black', // Color del borde
       },
     },
     y: {
       suggestedMin: -10.0, // -1.0,
       suggestedMax: 20.0, //2.0,
+      ticks: { color: 'rgb(0,0,0)'},
       title:{
         text: "Temperatura [°C]" as const,
         display: true,
@@ -179,7 +186,11 @@ export const GraficoComponent: React.FC<CardProps> = ({propsCamara}) => {
       type: 'linear' as const,
       position: 'left' as const,
       grid: {
-        color: 'rgba(49, 48, 48, 0.3)',
+        color: 'rgba(49, 48, 48, 0.5)',
+       display: true,
+       drawBorder: true, // Dibuja el borde del eje X
+       //color: 'rgba(0, 0, 0, 0.1)', // Color de la cuadrícula
+       borderColor: 'black', // Color del borde
       },
     },
   };
@@ -224,14 +235,21 @@ export const GraficoComponent: React.FC<CardProps> = ({propsCamara}) => {
   }
 
   const pointOptions = {
-      radius: 1,
+      radius: 2,
+  }
+  const crosshairOptions = {
+    line: {
+      color: '#F66',  // crosshair line color
+      width: 1        // crosshair line width
+    },
   }
 
   const options = {
     scales: scales,
     plugins: {
       zoom: zoomOptions,
-      title: tituloOptions,    
+      title: tituloOptions,
+      crosshair: crosshairOptions,   
     },
     transitions: {
       zoom: {
@@ -263,16 +281,29 @@ export const GraficoComponent: React.FC<CardProps> = ({propsCamara}) => {
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
                     <CircularProgress />
                 </Box>
-            ) :
-                <>   
-                    <Line ref={chartRef} options={options} data={dataValores} />
-                    <Stack sx={{my: 2}} spacing={2} direction="row">
+            ) : <>
+                    <div 
+                      style={{ 
+                        width: '100%', 
+                        margin: '0 auto', 
+                        border: '1px solid black', 
+                        padding: '10px' }}>
+                      <Line ref={chartRef} options={options} data={dataValores} />
+                      </div>
+                     <Stack sx={{my: 2}} spacing={2} direction="row">
                       <Button variant="outlined" onClick={resetZoom}>Reset Zoom</Button>
-                      <Button variant="outlined" onClick={PanAtras}>Mover Atras</Button>
-                      <Button variant="outlined" onClick={PanAdelante}>Mover Adelante</Button>
-                    </Stack>
+                        <Button variant="outlined" onClick={PanAtras}>Mover Atras</Button>
+                        <Button variant="outlined" onClick={PanAdelante}>Mover Adelante</Button>
+                      </Stack>
+
                 </>
             }
         </>
     )
 }
+/*
+<Stack sx={{my: 2}} spacing={2} direction="row">
+<Button variant="outlined" onClick={resetZoom}>Reset Zoom</Button>
+<Button variant="outlined" onClick={PanAtras}>Mover Atras</Button>
+<Button variant="outlined" onClick={PanAdelante}>Mover Adelante</Button>
+</Stack>*/

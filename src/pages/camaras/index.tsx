@@ -1,12 +1,12 @@
-import { Box, Button, CircularProgress, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Divider, Grid, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { camaras } from "../../api/camaras";
 import { TypeFrigorficos } from '../home/interace/frigorifico.interface';
 import { TypeCamaras } from "./interface/camara.interface";
 import { HeaderComponent, CamaraComponent } from "../../components";
-import { usePageVisibility } from "./usePageVisibility";
 import { useGetValorCamarasByFrioIdQuery } from "../../api/frioApi";
+import UpdateIcon from '@mui/icons-material/Update';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
 
 export const CamarasPage: React.FC = () => {
@@ -24,7 +24,7 @@ export const CamarasPage: React.FC = () => {
      //refetchOnMountOrArgChange: 10, //revalida la informacion cuando se monta el componente pero a los 10 segundos de la ultima vez que hizo un get satisfactorio, pero la revalidacion la hace en background 
    //  refetchOnFocus: true, //revalida la informacion cuando se pone el focus
    //  refetchOnReconnect: true, //revalida la informacion cuando se vuelve a conectar el servidor
-    pollingInterval: 120000, //Hace un polling cada 120 seg para revalidar la informacion con el servidor
+    pollingInterval: 60000, //Hace un polling cada 60 seg para revalidar la informacion con el servidor
    });
  
   /*const isPageVisible = usePageVisibility();
@@ -105,6 +105,56 @@ export const CamarasPage: React.FC = () => {
   }
 
     return (
+      <div>
+        <Container maxWidth="xl">
+        <Stack sx={{my: 2}} spacing={2} direction="row">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => navigate("/")}
+            startIcon={<NavigateBeforeIcon />} 
+          >
+            FRIGORIFICOS
+          </Button>
+        </Stack>
+          {isLoading ? (
+            <Box sx={{ display: "flex", justifyContent: "center"}}>
+              <CircularProgress />
+            </Box>
+          ) : (            
+            <Box sx={{ width: '100%', maxWidth: '100%', margin: '0 auto', padding: 2 }}>
+            {/* Título de la Lista */}
+            <Typography variant="h4" textAlign="center" sx={{ marginBottom: 4 }}>
+              {`Frigorifico ${frio.name}`}
+            </Typography>
+            {/* Renderizar Filas */}
+            {
+              data.data.camaras?.length > 0 ? (
+                data.data.camaras!.map((camara: TypeCamaras, index: any) => (
+                  <React.Fragment key={index}>
+                    <CamaraComponent
+                      propsFrio={frio}
+                      propsCamara={camara}
+                    />
+                    {/* Separador */}
+                    {index < data.data.camaras!.length - 1 && <Divider sx={{ marginBottom: 2 }} />}
+                  </React.Fragment>
+                ))
+              ) : (
+                <Typography variant="body1" textAlign="center" sx={{ marginTop: 4 }}>
+                  No hay cámaras para mostrar.
+                </Typography>
+              )}
+          </Box>
+          )
+          }
+        </Container>
+       </div>
+    );
+}
+
+/*
+<div>
         <Container maxWidth="xl">
           <HeaderComponent
             title= {`Frigorifico ${frio.name}`}
@@ -132,8 +182,21 @@ export const CamarasPage: React.FC = () => {
                   ) : "No hay datos"
                 }
               </div>
+              <div>
+                  {isFetching ? (
+                    <Box sx={{ display: "flex", justifyContent: "center"}}>
+                      <UpdateIcon />  
+                      <Typography>
+                          Actualiza Valores
+                      </Typography>
+                    </Box>
+                  ) : 
+                    <>
+                    </> 
+                  }   
+                </div>
             </>
           }
         </Container>
-      )
-}
+       </div>
+       */
