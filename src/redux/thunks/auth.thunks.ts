@@ -12,9 +12,13 @@ export const authThunk = createAsyncThunk(
 
             const AuthData = await user.login(username, password);
 
+            //console.log("Ejecuta login de acceso")
+
             const resData = AuthData.data;           
 
             localStorage.setItem("userInfo", JSON.stringify(resData));
+
+            //console.log("Se obtiene token de acceso:" + JSON.stringify(resData));
 
             if (AuthData.status === 200) {
                 return resData // Retornamos los datos del usuario desde la respuesta

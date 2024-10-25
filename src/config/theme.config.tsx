@@ -39,9 +39,9 @@ const theme = createTheme ({
     },
     components: {
         MuiButton: {
-            defaultProps: {
+            defaultProps: { //Definde los estilos globales para todos los botones
                 style: {
-                    textTransform : "none",
+                    textTransform : "none", 
                     boxShadow: "none",
                     borderRadius: "0.5em",
                 }

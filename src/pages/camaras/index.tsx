@@ -96,6 +96,11 @@ export const CamarasPage: React.FC = () => {
 
   }, [frio.id, isPageVisible, isPollingEnabled]);*/
 
+  if(!isLoading) 
+    {
+      console.log(data!.data.camaras);
+    }
+
   if (error) {
     return (
       <section className="alert alert-danger">

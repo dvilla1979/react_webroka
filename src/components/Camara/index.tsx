@@ -23,7 +23,8 @@ export const CamaraComponent: React.FC<CardProps> = ({propsFrio ,propsCamara}) =
                 borderBottom: '1px solid #ddd', // Línea separadora
                 padding: 1,
                 marginBottom: 2,
-                width: '100%'
+                width: '100%',
+                height: '25%'
             }}
         >
             {/* Espacio del Nombre - Ocupa un ancho fijo */}

@@ -32,7 +32,7 @@ export const NavBar: React.FC<{}> = () => {
 
     return (
         <Box sx={{ flexGrow: 1 }} >
-            <AppBar position="static">
+            <AppBar position="static">  {/* Analizar usar poition = "fixed"*/}
                 <Toolbar>
                     <IconButton
                         size="large"

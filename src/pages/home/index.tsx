@@ -42,6 +42,11 @@ export const HomePage: React.FC = () => {
       });
   }, [userData])*/
 
+  if(!isLoading) 
+  {
+    console.log(data!.data.frigorifico[0]);
+  }
+
   if (error) {
     return (
       <section className="alert alert-danger">

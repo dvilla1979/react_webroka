@@ -19,6 +19,7 @@ import 'chartjs-adapter-moment';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import CrosshairPlugin from 'chartjs-plugin-crosshair';
 
+
 type CardProps = {
     propsCamara: TypeCamaras;
 }
@@ -32,19 +33,30 @@ export const GraficoComponent: React.FC<CardProps> = ({propsCamara}) => {
 
   const [loading, setLoading] = React.useState<boolean>(true);
 
-  var startDb:Date =  moment().subtract(2,'day').toDate();
-  var startChart:Date =  moment().subtract(1,'day').toDate();
+ 
+  var startDb:Date =  moment().subtract(2,'hour').toDate();
+  var startChart:Date =  moment().subtract(1,'hour').toDate();
   var end:Date =  moment().toDate();
 
  
+  const CustomCrosshairPlugin = function (plugin: any) {  
+    const originalAfterDraw = plugin.afterDraw;  
+    plugin.afterDraw = function(chart: any, easing: any) {  
+        if (chart && chart.crosshair) {  
+          originalAfterDraw.call(this, chart, easing);  
+        }  
+    };  
+    return plugin;  
+  };
 
 
   React.useEffect(() => {
       setLoading(true); 
       valores
-      .getbyCamaraId(propsCamara.id, moment().subtract(2,'day').toDate(), moment().toDate())
+      .getbyCamaraId(propsCamara.id, moment().subtract(2,'hour').toDate(), moment().toDate())
       .then((r) => {
           setValor(r.data.data);
+          console.log(r.data.data);
           setTimeout(() => setLoading(false), 50); //Una vez que la data cargo a loa 300ms se renderizan el grafico 
         })
         .catch((err) => {
@@ -63,7 +75,7 @@ export const GraficoComponent: React.FC<CardProps> = ({propsCamara}) => {
     Legend,
     TimeScale,
     zoomPlugin,
-    CrosshairPlugin,
+    CustomCrosshairPlugin(CrosshairPlugin),
   );
 
   async function fetchData(x1: Date, x2: Date) : Promise<TypeSensor[] | null> {
@@ -87,10 +99,10 @@ export const GraficoComponent: React.FC<CardProps> = ({propsCamara}) => {
     const max = moment(chart.chart.scales.x.max).toDate();
 
     var start = startDb;
-    console.log("min" + min)
-    console.log("startDB " + startDb)
+   // console.log("min" + min)
+   // console.log("startDB " + startDb)
 
-    console.log(chartRef);
+   // console.log(chartRef);
 
     if(min < start)
     {
@@ -98,7 +110,7 @@ export const GraficoComponent: React.FC<CardProps> = ({propsCamara}) => {
       timer = setTimeout(() => {
           
         while (min < start) 
-            start = moment(start).subtract(2,'day').toDate();
+            start = moment(start).subtract(2,'hour').toDate();
 
         startDb = start;
 
