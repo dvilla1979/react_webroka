@@ -29,7 +29,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { ItemCamara, ItemFrigorifico } from '../interfaces/avanzado.interface';
 import { useSelector } from 'react-redux';
-import { frigorificos } from '../../../api/frigorificos';
+//import { frigorificos } from '../../../api/frigorificos';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 
@@ -62,6 +62,23 @@ export const AvanzadoCamaraComponent: React.FC<CardProps> = ({propsFrio}) => {
 
   //console.log("Ver cámaras de frigorífico con ID:",frios.data.filter((item: any) => item.id === propsFrioid)[0].name);
 
+  if (error) {
+    if (typeof error === 'object' && error !== null) {
+      if('data' in error)
+      {
+        return (
+          <section className="alert alert-danger">
+          Falla de conexion con el servidor <div>{JSON.stringify(error.data)}</div>
+          </section>
+        );
+      }
+      return (
+        <section className="alert alert-danger">
+          Falla de conexion con el servidor <div>{JSON.stringify(error)}</div>
+        </section>
+      );
+    }
+  }
   
   const handleAddClick = () => {
     setEditItem(null);

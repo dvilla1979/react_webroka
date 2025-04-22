@@ -2,7 +2,7 @@
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react'
 import { localUser } from '../utils/localUser';
 
-const BASE_URL = "http://192.168.0.239:8000/api/";
+const BASE_URL: string = (process.env.REACT_APP_API_URL as string)
 
 // Define a service using a base URL and expected endpoints
 export const frioApi = createApi({

@@ -43,13 +43,31 @@ export const AvanzadoSensorComponent: React.FC<CardProps> = ({propsFrio, propsCa
   
   const navigate = useNavigate();
 
-  const { data = [], isLoading, refetch } = useGetSensoresByCamaraIdQuery(propsCamara.id);
+  const { data = [], error, isLoading, refetch } = useGetSensoresByCamaraIdQuery(propsCamara.id);
   const [addItem] = useAgregarSensorMutation();
   const [updateItem] = useActualizarSensorMutation();
   const [deleteItem] = useBorrarSensorMutation();
   
   const [editItem, setEditItem] = useState<ItemSensor | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  if (error) {
+    if (typeof error === 'object' && error !== null) {
+      if('data' in error)
+      {
+        return (
+          <section className="alert alert-danger">
+          Falla de conexion con el servidor <div>{JSON.stringify(error.data)}</div>
+          </section>
+        );
+      }
+      return (
+        <section className="alert alert-danger">
+          Falla de conexion con el servidor <div>{JSON.stringify(error)}</div>
+        </section>
+      );
+    }
+  }
 
   const handleAddClick = () => {
     setEditItem(null);

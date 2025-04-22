@@ -185,8 +185,8 @@ export const GraficoComponent: React.FC<CardProps> = ({propsCamara}) => {
       },
     },
     y: {
-      suggestedMin: -10.0, // -1.0,
-      suggestedMax: 20.0, //2.0,
+      suggestedMin: -5.0, // -1.0,
+      suggestedMax: 5.0, //2.0,
       ticks: { color: 'rgb(0,0,0)'},
       title:{
         text: "Temperatura [°C]" as const,

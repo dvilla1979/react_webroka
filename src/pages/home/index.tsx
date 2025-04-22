@@ -42,17 +42,27 @@ export const HomePage: React.FC = () => {
       });
   }, [userData])*/
 
-  if(!isLoading) 
+  /*if(!isLoading) 
   {
     console.log(data!.data.frigorifico[0]);
-  }
+  }*/
 
   if (error) {
-    return (
-      <section className="alert alert-danger">
-        Falla de conexion con el servidor {/**error.data.message*/}
-      </section>
-    );
+    if (typeof error === 'object' && error !== null) {
+      if('data' in error)
+      {
+        return (
+          <section className="alert alert-danger">
+          Falla de conexion con el servidor <div>{JSON.stringify(error.data)}</div>
+          </section>
+        );
+      }
+      return (
+        <section className="alert alert-danger">
+          Falla de conexion con el servidor <div>{JSON.stringify(error)}</div>
+        </section>
+      );
+    }
   }
 
   return (
@@ -69,7 +79,7 @@ export const HomePage: React.FC = () => {
               {"Frigorificos"}
             </Typography>
             {
-              data.data.frigorifico?.length !== 0 ? (
+              (data && data.data.frigorifico?.length !== 0) ? (
                 <Grid sx={{my: 2}} container spacing={2} direction="row">
                   {
                     data.data.frigorifico!.map((frigorifico: TypeFrigorficos) => (
@@ -79,7 +89,8 @@ export const HomePage: React.FC = () => {
                     ))
                   }
                 </Grid>
-              ) : "No hay frigorificos para mostrar"
+              ) : 
+              ("No hay frigorificos para mostrar")
             }
           </div>
         </>

@@ -96,17 +96,27 @@ export const CamarasPage: React.FC = () => {
 
   }, [frio.id, isPageVisible, isPollingEnabled]);*/
 
-  if(!isLoading) 
+  /*if(!isLoading) 
     {
       console.log(data!.data.camaras);
     }
-
+*/
   if (error) {
-    return (
-      <section className="alert alert-danger">
-        Falla de conexion con el servidor{/**error.data.message*/}
-      </section>
-    );
+    if (typeof error === 'object' && error !== null) {
+      if('data' in error)
+      {
+        return (
+          <section className="alert alert-danger">
+          Falla de conexion con el servidor <div>{JSON.stringify(error.data)}</div>
+          </section>
+        );
+      }
+      return (
+        <section className="alert alert-danger">
+          Falla de conexion con el servidor <div>{JSON.stringify(error)}</div>
+        </section>
+      );
+    }
   }
 
     return (
